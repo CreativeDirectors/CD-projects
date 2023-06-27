@@ -34,7 +34,6 @@ export default class sketch {
       new THREE.TextureLoader().load(particle_mask)
 
     ]
-
     // this.planetwo = new THREE.Mesh(
     //   new THREE.PlaneGeometry(4000, 1000),
     //   new THREE.MeshBasicMaterial()
