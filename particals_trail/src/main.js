@@ -12,12 +12,9 @@ export default class sketch {
 
   constructor() {
 
-    let frames = 0,
-      prevTime = performance.now();
 
     this.app = document.getElementById("app")
-    this.zoom = 400
-
+    this.zoom = 3000
 
     this.stats = new Stats();
     document.body.appendChild(this.stats.dom);
@@ -40,7 +37,7 @@ export default class sketch {
 
       // this.app.appendChild(button);
 
-      this.camera = new THREE.PerspectiveCamera(45, this.app.offsetWidth / this.app.offsetHeight, 0.01, 20000);
+      this.camera = new THREE.PerspectiveCamera(45, this.app.offsetWidth / this.app.offsetHeight, 0.01, 100000);
       this.camera.position.z = this.zoom;
       // this.camera.position.setY(-200);
 
@@ -50,9 +47,6 @@ export default class sketch {
       this.mouse = new THREE.Vector2()
       this.startTime = Date.now();
       this.point = new THREE.Vector2()
-
-      this.clock = new THREE.Clock()
-
 
       this.textures = [
         new THREE.TextureLoader().load(img),
@@ -124,26 +118,27 @@ export default class sketch {
         time: { type: "f", value: 0 },
         elapsedTime: { value: 0.0 },
       },
-      // side: THREE.DoubleSide,
-      side: THREE.BackSide,
-      blending: THREE.NoBlending,
-      transparent: true, //  ######################  --   transparent ---
+      side: THREE.DoubleSide,
+      transparent: false, //  ######################    --   transparent ---
       depthTest: false,
-      depthWrite: false,
+      depthWrite: false
     })
 
-    let gridWHMulti = 2
-    let gridWidth = 300 / gridWHMulti
-    let gridHeight = 300 / gridWHMulti
+    let gridWHMulti = 0.5
+    let gridWidth = 100 / gridWHMulti
+    let gridHeight = 100 / gridWHMulti
+
 
     let multiplier = 1
     let number = gridWidth * gridHeight * (multiplier);
 
+
+
     function rand(a, b) {
       return a + (b - a) * Math.random()
     }
-    // this.geometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
 
+    // this.geometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
     this.geometry = new THREE.BufferGeometry();
 
     this.positions = new THREE.BufferAttribute(new Float32Array(number * 3), 3)
@@ -194,39 +189,24 @@ export default class sketch {
     // this.scene.add(this.planetwo)
   }
 
+
+
+
+
+
   render() {
     this.time++
     // console.log(this.time);
     // this.mesh.rotation.x += 0.01;
     // this.mesh.rotation.y += 0.02;
 
-    // const elapsedSeconds = this.clock.getElapsedTime()
-
     var elapsedSeconds = (Date.now() - this.startTime) / 1000;
     this.material.uniforms.elapsedTime.value = elapsedSeconds;
-
-
-
     this.material.uniforms.time.value = this.time
     // this.material.uniforms.move.value = this.move
     this.material.uniforms.mouse.value = this.point
+
     this.renderer.render(this.scene, this.camera);
-
-    // FPS
-
-    // this.frames++;
-    // const time = performance.now();
-
-    // if (time >= this.prevTime + 1000) {
-
-    //   console.log(Math.round((frames * 1000) / (time - prevTime)));
-
-    //   frames = 0;
-    //   prevTime = time;
-
-    // }
-
-    //
 
     this.stats.update();
     const render = this.render.bind(this);
